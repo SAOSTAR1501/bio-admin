@@ -1,65 +1,76 @@
 import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { JobActions, JobSelectors } from "../../app/services/jobs/jobs.slice";
+import {
+  BioActions,
+  BioSelectors,
+} from "../../app/services/bios/bios.slice";
 import MST from "../../components";
 import Pagination from "../../components/base/pagination/Pagination";
-import JobDeleteModal from "./Job.Options";
 
-function JobList() {
+function BioUser() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const jobList = useSelector(JobSelectors.list);
-  const pagination = useSelector(JobSelectors.pagination);
+  const bioList = useSelector(BioSelectors.list);
+  const pagination = useSelector(BioSelectors.pagination);
 
   useEffect(() => {
-    dispatch(JobActions.getJobList());
+    dispatch(BioActions.getBioList());
   }, [pagination.page, navigate, dispatch]);
 
   useEffect(() => {
     return () => {
-      dispatch(JobActions.resetSession());
+      dispatch(BioActions.resetSession());
     };
   }, [navigate, dispatch]);
 
   const thead = [
     {
-      name: "STT",  
-      className:"bg-blue-500",
-    },
-    {
-      name: "Mã ngành nghề",
+      name: "STT",
+      style: { width: 20 },
       className: "",
     },
     {
-      name: "Tên ngành nghề",
+      name: "Tên bio",
+      style: { width: 200 },
+      className: "",
     },
     {
-      name: "Thao tác",
+      name: "Ngành nghề",
+      style: { width: 200 },
+    },
+    {
+      name: "Đường dẫn",
+      style: {
+        textAlign: "left",
+      },
     },
   ];
 
   const genRenderList = useCallback(() => {
-    return (jobList || []).map((job, index) => {
+    return (bioList || []).map((x, index) => {
       return [
         { value: (pagination.page - 1) * pagination.pageSize + (index + 1) },
         {
-          value: job?.code,
+          value: x?.fullName,
         },
         {
-          value: job?.name,
-
+          value: x?.job?.name,
         },
         {
-          value: <JobDeleteModal id={job._id} />,
+          value: x?.bioLink,
+          style: {
+            textAlign: "left",
+            color: "#FF8900",
+          },
         },
       ];
     });
-  }, [jobList]);
+  }, [bioList, pagination]);
 
   const onChangePage = (page) => {
     dispatch(
-      JobActions.setPagination({
+      BioActions.setPagination({
         ...pagination,
         page,
       })
@@ -82,4 +93,4 @@ function JobList() {
   );
 }
 
-export default JobList;
+export default BioUser;

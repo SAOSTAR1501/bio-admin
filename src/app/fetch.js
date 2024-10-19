@@ -18,14 +18,15 @@ const processQueue = (error, token = null) => {
 
 const timeout = CONST.REQUEST.TIME_OUT;
 let AxiosClient = axios.create({
-  baseURL: CONST.URL.API,
+  baseURL:process.env.REACT_APP_SC_BACKEND_API,
   timeout,
   headers: {
     "Content-Type": "application/json",
+    'ngrok-skip-browser-warning':true
   },
 });
 let AxiosClientKWT = axios.create({
-  baseURL: `${CONST.URL.API}/kwt`,
+  baseURL: `${process.env.REACT_APP_SC_BACKEND_API}`,
   timeout,
   headers: {
     "Content-Type": "application/json",

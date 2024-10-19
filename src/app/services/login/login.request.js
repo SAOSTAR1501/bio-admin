@@ -1,7 +1,7 @@
 import SysFetch from "../../fetch";
 
 const LoginRequest = {
-  checkLogin: ({ body }) => SysFetch.post("admin-auth/login", body),
+  checkLogin: ({ body }) => SysFetch.post("/admin-api/admin-auth/login", body),
   changePassword: ({ body }) =>
     SysFetch.post("admin-auth/change-password", body),
 };

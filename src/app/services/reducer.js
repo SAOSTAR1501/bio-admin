@@ -13,6 +13,7 @@ import LocalServerReducer from "./local-server/local-server.slice.js";
 import SupportAccountReducer from "./support-account/support-account.slice.js";
 import JobReducer from "./jobs/jobs.slice.js";
 import BioReducer from "./bios/bios.slice.js";
+import UserReducer from "./users/users.slide.js";
 const reducer = {
   app: AppReducer,
   login: LoginReducer,
@@ -29,6 +30,7 @@ const reducer = {
   supportAccount: SupportAccountReducer,
   job: JobReducer,
   bio: BioReducer,
+  user: UserReducer,
 };
 
 export default reducer;

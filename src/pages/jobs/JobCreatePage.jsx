@@ -16,7 +16,7 @@ function JobCreatePage() {
   const jobDetail = useSelector(JobSelectors.detail);
   const params = useParams();
   const id = params?.id;
-  const isEdit = !!id
+  const isEdit = !!id;
 
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
@@ -32,34 +32,41 @@ function JobCreatePage() {
     } else {
       dispatch(JobActions.setJobById(undefined));
     }
-  }, [id]);
+  }, [id, dispatch]);
 
   useEffect(() => {
     setName(jobDetail?.name || "");
     setCode(jobDetail?.code || "");
   }, [jobDetail]);
 
-  const validate = (callback) => {
+  const validate = () => {
     const tempEM = {
       name: "",
       code: "",
     };
 
-    let errorCount = 0;
+    let isValid = true;
 
-    if (isEmpty(name)) {
-      errorCount++;
-      tempEM.name = "name không được để trống";
+    if (isEmpty(name.trim())) {
+      isValid = false;
+      tempEM.name = "Tên ngành nghề không được để trống";
     }
-    if (isEmpty(code)) {
-      errorCount++;
-      tempEM.code = "code không được để trống";
+    if (isEmpty(code.trim())) {
+      isValid = false;
+      tempEM.code = "Mã ngành nghề không được để trống";
     }
 
-    if (errorCount === 0) {
-      callback();
-    } else {
-      setErrorMessage(tempEM);
+    setErrorMessage(tempEM);
+    return isValid;
+  };
+
+  const handleSubmit = () => {
+    if (validate()) {
+      if (isEdit) {
+        onEdit();
+      } else {
+        onCreate();
+      }
     }
   };
 
@@ -71,8 +78,8 @@ function JobCreatePage() {
           navigate(`/services/settings/job/edit/${id}`);
         },
         body: {
-          name,
-          code,
+          name: name.trim(),
+          code: code.trim(),
         },
       })
     );
@@ -86,8 +93,8 @@ function JobCreatePage() {
         },
         id: jobDetail._id,
         body: {
-          name,
-          code,
+          name: name.trim(),
+          code: code.trim(),
         },
       })
     );
@@ -95,11 +102,7 @@ function JobCreatePage() {
 
   return (
     <MST.Container
-      title={
-        isEdit
-          ? "Cập nhật ngành nghề"
-          : "Tạo mới ngành nghề"
-      }
+      title={isEdit ? "Cập nhật ngành nghề" : "Tạo mới ngành nghề"}
       right={
         <div className="d-flex">
           <MST.Button
@@ -109,13 +112,7 @@ function JobCreatePage() {
           >
             Huỷ
           </MST.Button>
-          <MST.Button
-            onClick={
-              isEdit
-                ? () => validate(onEdit)
-                : () => validate(onCreate)
-            }
-          >
+          <MST.Button onClick={handleSubmit}>
             Lưu lại
           </MST.Button>
         </div>
@@ -134,16 +131,16 @@ function JobCreatePage() {
               </div>
               <div>
                 <MST.Input
-                  errorMessage={errorMessage?.username}
+                  errorMessage={errorMessage.name}
                   placeholder="Nhập tên ngành nghề"
                   maxLength={225}
                   value={name}
                   onChange={(e) => {
+                    setName(e.target.value);
                     setErrorMessage({
                       ...errorMessage,
-                      username: "",
+                      name: "",
                     });
-                    setName(e.target.value);
                   }}
                 />
               </div>
@@ -155,15 +152,15 @@ function JobCreatePage() {
               </div>
               <div>
                 <MST.Input
-                  errorMessage={errorMessage?.password}
+                  errorMessage={errorMessage.code}
                   placeholder="Nhập mã ngành nghề"
                   value={code}
                   onChange={(e) => {
+                    setCode(e.target.value);
                     setErrorMessage({
                       ...errorMessage,
-                      password: "",
+                      code: "",
                     });
-                    setCode(e.target.value);
                   }}
                 />
               </div>
@@ -175,4 +172,4 @@ function JobCreatePage() {
   );
 }
 
-export default JobCreatePage;
+export default JobCreatePage; 

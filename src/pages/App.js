@@ -12,6 +12,7 @@ import JobCreatePage from "./jobs/JobCreatePage";
 import JobPage from "./jobs/JobPage";
 import LoginPage from "./login/LoginPage";
 import PageNotFound from "./page-not-found/PageNotFoundPage";
+import UserPage from "./user/UserPage";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,11 @@ const router = createBrowserRouter([
           {
             path: "settings/bio",
             element: <BiosPage />,
+            errorElement: <PageNotFound />,
+          },
+          {
+            path: "settings/user",
+            element: <UserPage />,
             errorElement: <PageNotFound />,
           },
         ],

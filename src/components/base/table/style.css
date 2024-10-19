@@ -28,11 +28,12 @@
 }
 
 .table-td-head {
-  color: var(--Dark-100, #72777a);
+  color: var(--Dark-100, #ffffff);
   font-size: 14px;
   line-height: 16px;
   text-transform: uppercase;
   text-align: center;
+  background-color: #ff8900;
 }
 
 .table-no-data {

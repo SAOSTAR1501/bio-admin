@@ -9,6 +9,8 @@ const initialState = {
     totalPage: 0,
   },
   detail: undefined,
+  loading: false,
+  error: null,
 };
 
 const JobSlice = createSlice({
@@ -28,6 +30,12 @@ const JobSlice = createSlice({
       };
     },
 
+    setLoading: (state, { payload }) => {
+      state.loading = payload;
+    },
+    setError: (state, { payload }) => {
+      state.error = payload;
+    },
     getJobList: (state, { payload }) => {},
 
     setJobList: (state, { payload }) => {
@@ -53,4 +61,5 @@ export const JobSelectors = {
   list: (state) => state.job.list,
   pagination: (state) => state.job.pagination,
   detail: (state) => state.job.detail,
+  error: (state) => state.user.error,
 };
