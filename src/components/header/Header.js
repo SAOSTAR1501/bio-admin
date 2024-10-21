@@ -15,7 +15,7 @@ function Header() {
           className="header-logo"
           src={require("../../images/logo.png")}
         />
-        <span className="header-company">MST Entertainment</span>
+        <span className="header-company">Biogo Admin</span>
       </div>
       <UserInfo />
     </div>

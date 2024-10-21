@@ -72,7 +72,7 @@ function LoginPage() {
                       marginLeft: 10,
                     }}
                   >
-                    MST Entertainment
+                    Biogo Admin
                   </p>
                 </div>
                 <p
