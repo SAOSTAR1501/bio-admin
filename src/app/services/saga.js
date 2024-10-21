@@ -13,6 +13,7 @@ import LocalServerSaga from "./local-server/local-server.saga";
 import SupportAccountSaga from "./support-account/support-account.saga";
 import JobSaga from "./jobs/jobs.saga";
 import BioSaga from "./bios/bios.saga";
+import UserSaga from "./users/users.saga";
 function* rootSaga() {
   yield all([
     call(LoginSaga),
@@ -29,6 +30,7 @@ function* rootSaga() {
     call(SupportAccountSaga),
     call(JobSaga),
     call(BioSaga),
+    call(UserSaga)
   ]);
 }
 

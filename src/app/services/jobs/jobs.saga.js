@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { delay, put, select, takeLatest } from "redux-saga/effects";
+import { call, delay, put, select, takeLatest } from "redux-saga/effects";
 import JobRequest from "./jobs.request";
 import { JobActions, JobSelectors } from "./jobs.slice";
 
@@ -17,11 +17,11 @@ function* update({ payload }) {
   try {
     yield delay(100);
     const { onSuccess, body, id } = payload;
-    const rs = yield JobRequest.update(id, body);
-    if (rs.success) {
+    const response = yield JobRequest.update(id, body);
+    if (response.success) {
       onSuccess();
     } else {
-      throw rs.message;
+      throw response.message;
     }
   } catch (error) {
     console.log({ error });
@@ -33,11 +33,11 @@ function* deleteJob({ payload }) {
   try {
     yield delay(100);
     const { id, onSuccess } = payload;
-    const rs = yield JobRequest.delete(id);
-    if (rs.success) {
+    const response = yield JobRequest.delete(id);
+    if (response.success) {
       onSuccess();
     } else {
-      throw rs.message;
+      throw response.message;
     }
   } catch (error) {
     toast.error(error);
@@ -48,11 +48,11 @@ function* create({ payload }) {
   try {
     yield delay(100);
     const { onSuccess, body } = payload;
-    const rs = yield JobRequest.create(body);
-    if (rs.success) {
-      onSuccess(rs.data._id);
+    const response = yield JobRequest.create(body);
+    if (response.success) {
+      onSuccess(response.data._id);
     } else {
-      throw rs.message;
+      throw response.message;
     }
   } catch (error) {
     console.log({ error });
@@ -63,31 +63,34 @@ function* create({ payload }) {
 function* getJobList({ payload }) {
   try {
     yield delay(100);
-    const { status } = payload || {};
+    yield put(JobActions.setLoading(true));
+    yield put(JobActions.setError(null));
     const pagination = yield select(JobSelectors.pagination);
-
-    const rs = yield JobRequest.gets({
-      page: pagination.page,
-      pageSize: pagination.pageSize,
-    });
-
-    if (rs.success) {
-      yield put(JobActions.setJobList(rs.data.jobs));
-      yield put(JobActions.setPagination(rs.data.pagination));
-    }
-  } catch (error) {
-    toast.error(error);
+    const {page = pagination.page, pageSize = pagination.pageSize} = payload || {};
+    const response = yield call(JobRequest.gets,{page,pageSize});
+    if (response.success) {
+      yield put(JobActions.setJobList(response.data.jobs));
+      yield put(JobActions.setPagination(response.data.pagination));
+    } else {
+    throw new Error(response.message || "Failed to fetch user list");
   }
+} catch (error) {
+  console.error("Error fetching user list:", error);
+  toast.error(error.message || "An error occurred while fetching the user list");
+  yield put(JobActions.setError(error.message || "Failed to fetch user list"));
+  yield put(JobActions.setJobList([]));
+} finally {
+  yield put(JobActions.setLoading(false));
+}
 }
 
 function* getJobById({ payload }) {
   console.log(payload);
   try {
     yield delay(100);
-    const rs = yield JobRequest.get(payload.id);
-    console.log('rs', rs);
-    if (rs.success) {
-      yield put(JobActions.setJobById(rs.data.job));
+    const response = yield JobRequest.get(payload.id);
+    if (response.success) {
+      yield put(JobActions.setJobById(response.data.job));
     }
   } catch (error) {
     toast.error(error);

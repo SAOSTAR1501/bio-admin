@@ -1,21 +1,18 @@
 import SysFetch from "../../fetch";
-import qs from "qs";
 
 const SupportAccountRequest = {
   delete: (id) => {
-    return SysFetch.delete(`jobs/${id}`);
+    return SysFetch.delete(`admin-api/job/${id}`);
   },
   update: (id, body) => {
-    return SysFetch.put(`jobs/${id}`, body);
+    return SysFetch.put(`admin-api/job/${id}`, body);
   },
   create: (body) => {
-    return SysFetch.post(`jobs`, body);
+    return SysFetch.post(`admin-api/job`, body);
   },
-  get: (id) => SysFetch.get(`jobs/${id}`),
-  gets: (body) => {
-    return SysFetch.get(
-      `jobs?${qs.stringify(body, { encode: false })}`
-    );
+  get: (id) => SysFetch.get(`admin-api/job/${id}`),
+  gets: () => {
+      return SysFetch.get(`/admin-api/job`)
   },
 };
 

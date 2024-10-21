@@ -11,9 +11,6 @@ function Table({ head = [], body = [] }) {
               return (
                 <th
                   className={`table-td-base ${item.className}`}
-                  style={{
-                    ...item.style,
-                  }}
                   key={`${index}`}
                 >
                   {item.name}
@@ -31,9 +28,6 @@ function Table({ head = [], body = [] }) {
                   return (
                     <td
                       className={`table-td-base ${oneTd.className}`}
-                      style={{
-                        ...oneTd.style,
-                      }}
                       key={`${oneTd.value}${index2}`}
                     >
                       {oneTd.value}
